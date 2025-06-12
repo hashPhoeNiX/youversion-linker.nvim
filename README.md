@@ -1,0 +1,1 @@
+# youversion-linker.nvim
