@@ -2,18 +2,18 @@
 
 let
   plugins = [
-    { 
-      name = "present";
-      path = ./present.nvim/lua; 
-    }
-    {
-      name = "at_popup";
-      path = ./at_popup.nvim/lua;
-    }
-    {
-      name = "youversion_linker";
-      path = ./youversion-linker.nvim/lua;
-    }
+    # { 
+    #   name = "present";
+    #   path = ./present.nvim/lua; 
+    # }
+    # {
+    #   name = "at_popup";
+    #   path = ./at_popup.nvim/lua;
+    # }
+    # {
+    #   name = "youversion_linker";
+    #   path = ./youversion-linker.nvim/lua;
+    # }
     # Add more plugins as needed:
     # { name = "another"; path = ./path/to/plugin/lua; }
   ];
@@ -32,7 +32,7 @@ in
   env = {
     GREET = "devenv";
     EDITOR = "nvim";
-    NVIM_TEST_CONFIG = ./. + "/test-config/nvim";
+    # NVIM_TEST_CONFIG = ./. + "/test-config/nvim";
   };
 
   packages = with pkgs; [
@@ -64,8 +64,10 @@ in
     nvimDir = "${configDir}/nvim";
     luaDir = "${nvimDir}/lua";
   in ''
+    export NVIM_TEST_CONFIG="${nvimDir}"
+
     if [ ! -d "${configDir}" ]; then
-      mkdir -p "${configDir}/nvim"
+      mkdir -p "${nvimDir}"
       echo "Created missing directory: ${configDir}/nvim"
     fi
 
