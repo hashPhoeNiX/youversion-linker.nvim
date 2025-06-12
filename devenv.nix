@@ -53,7 +53,7 @@ in
     
     # Reset to template configuration
     reset-config.exec = ''
-      cp ${./init.lua} "$NVIM_TEST_CONFIG/init.lua"
+      touch "$NVIM_TEST_CONFIG/init.lua"
       chmod u+w "$NVIM_TEST_CONFIG/init.lua"
       echo "Configuration reset to template"
     '';
@@ -64,6 +64,11 @@ in
     nvimDir = "${configDir}/nvim";
     luaDir = "${nvimDir}/lua";
   in ''
+    if [ ! -d "${configDir}" ]; then
+      mkdir -p "${configDir}/nvim"
+      echo "Created missing directory: ${configDir}/nvim"
+    fi
+
     # Setup isolated Neovim config
     export XDG_CONFIG_HOME="${configDir}"
     mkdir -p "${luaDir}"
@@ -86,7 +91,7 @@ in
     # Initialize config if missing
     if [ ! -f "${nvimDir}/init.lua" ]; then
       mkdir -p "${nvimDir}"
-      cp "${./init.lua}" "${nvimDir}/init.lua"
+      touch "${nvimDir}/init.lua"
       chmod u+w "${nvimDir}/init.lua"  # Make writable
       echo "Created init.lua from template (editable at $NVIM_TEST_CONFIG/init.lua)"
     else
