@@ -37,6 +37,7 @@ in
 
   packages = with pkgs; [
     neovim
+    tree
     lua
     ripgrep
     fd

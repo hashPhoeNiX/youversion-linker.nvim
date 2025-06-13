@@ -23,6 +23,7 @@ return {
         ft = "toggleterm",
         size = { height = 0.2 },
         -- exclude floating windows
+        title = "%{b:snacks_terminal.id}: %{b:term_title}",
         filter = function(buf, win)
           return vim.api.nvim_win_get_config(win).relative == ""
         end,
