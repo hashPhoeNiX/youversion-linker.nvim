@@ -10,10 +10,10 @@ let
     #   name = "at_popup";
     #   path = ./at_popup.nvim/lua;
     # }
-    # {
-    #   name = "youversion_linker";
-    #   path = ./youversion-linker.nvim/lua;
-    # }
+    {
+      name = "youversion-linker";
+      path = ./lua;
+    }
     # Add more plugins as needed:
     # { name = "another"; path = ./path/to/plugin/lua; }
   ];
