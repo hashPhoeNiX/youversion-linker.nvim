@@ -1,8 +1,10 @@
-local pl = require("pl.pretty")
-local core = require("youversion-linker.core")
+local M = {}
 
-local line = vim.api.nvim_get_current_line()
 
-local result = core.main(line)
+M.setup = function()
 
-pl.dump(result)
+end
+
+M.core = require("youversion-linker.core")
+
+return M
