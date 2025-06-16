@@ -1,4 +1,4 @@
-local lookup = require("utils.book_lookup")
+local lookup = require("youversion-linker.utils.book_lookup")
 
 local M = {}
 
@@ -24,6 +24,7 @@ M.buildYouVersionURL = function(parsedRef)
   end
 
   local book = lookup.getBook(parsedRef.book)
+  vim.print(book)
   local bookName = book:lower():gsub("%s+", "-"):gsub("[^%w-]", "")
   local baseURL = "https://www.bible.com/bible/" .. "1/" .. bookName .. "." .. parsedRef.chapter .. "." .. parsedRef.verseSection:gsub("%s+", "")
 

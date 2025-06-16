@@ -1,8 +1,8 @@
 -- ===================================================================
 -- UTILITY FUNCTIONS FOR THE PLUGIN WORKFLOW
 -- ===================================================================
-rex = require("rex_pcre")
-regex = require("utils.regex_patterns")
+local rex = require("rex_pcre")
+local regex = require("youversion-linker.utils.regex_patterns")
 
 local M = {}
 

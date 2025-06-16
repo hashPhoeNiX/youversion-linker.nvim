@@ -48,6 +48,7 @@ end
 -- return booksTable
 -- end
 
+local booksTable = M.load_book_abbreviations()
 
 M.cleanBookName = function(book)
 return book:lower():gsub("%s+", "")
