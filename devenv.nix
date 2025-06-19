@@ -42,6 +42,7 @@ in
     ripgrep
     fd
     git
+    nixd
     lua-language-server
     lua51Packages.lua
     lua51Packages.luarocks

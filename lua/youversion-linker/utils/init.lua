@@ -5,4 +5,5 @@ return {
     get_html_page = require('youversion-linker.utils.get_html_page'),
     regex_patterns = require('youversion-linker.utils.regex_patterns'),
     regex_utils = require('youversion-linker.utils.regex_utils'),
+    versions = require('youversion-linker.utils.versions'),
 }
