@@ -1,4 +1,5 @@
 require("config.lazy")
+-- require("config.lsp")
 
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
@@ -38,6 +39,27 @@ vim.keymap.set("n", "<leader><leader>x", function()
     return "<cmd>w<cr><cmd>so %<cr>"
   end
 end, { expr = true })
+
+
+-- LSP 
+vim.lsp.enable({
+  -- lua
+  "luals",
+  -- nix
+  -- "nil_ls",
+  "nixd",
+  -- python
+  -- "pyright",
+  -- "ruff",
+  -- markdown
+  -- "ltex",
+  -- terraform
+  -- "terraformls",
+  -- yaml
+  -- "yamlls",
+  -- bash
+  -- "bashls"
+})
 
 -- Initialize all test plugins
 local plugins = {
