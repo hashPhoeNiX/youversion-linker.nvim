@@ -12,3 +12,8 @@
 [ ] Add a trigger for character detection
 [ ] Auto update popup as letters are being typed
 [ ] Fix issue of reading books that starts with numbers, such as 1 John, etc.
+
+@John 3:16
+
+@John 3:16
+

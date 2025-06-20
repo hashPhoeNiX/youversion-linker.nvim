@@ -13,7 +13,9 @@ local row = line_number - 1 -- row based
 
 local before = line:sub(1, col + 1) -- Get prefix of the cursor position
 local after = line:sub(col + 2, -1) -- Get suffix of the cursor position
-print(after)
+local trigger = line:sub(col+1, col+1)
+
+print(trigger .. after)
 
 local function replace_line_with_bible_verse(after, item_text, version)
   -- local line = api.nvim_get_current_line()
@@ -107,6 +109,15 @@ local menu = Menu(popup_options, {
 
 menu:mount()
 
+menu:on(event.InsertCharPre, function()
+  local typed_char = vim.v.char
+
+  if typed_char == "@" then
+    print("Typed a trigger symbol!")
+  end
+end)
+
 -- @John 3:16-18
 
 -- @John 3:16-18
+-- @
