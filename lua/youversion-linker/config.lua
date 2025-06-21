@@ -1,6 +1,8 @@
 local M = {}
 local default_config = {
-    popup_options = {
+  popup_options = {
+    enter = false,
+    focusable = true,
     relative = "cursor",
     position = {
       row = 1,
@@ -16,6 +18,9 @@ local default_config = {
         top = "[Bible Versions]",
         top_align = "center",
       },
+    },
+    buf_options = {
+      readonly = true,
     },
     win_options = {
       winhighlight = "Normal:Normal",
