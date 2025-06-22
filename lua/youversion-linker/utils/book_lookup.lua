@@ -10,9 +10,9 @@ M.load_book_abbreviations = function()
   end
   
   local source = info.source:match("^@(.+)") or info.source:sub(2)
-  print(source)
+  -- print(source)
   local dirname = vim.fn.fnamemodify(source, ":h")
-  print(dirname)
+  -- print(dirname)
   local book_dir_path = vim.fn.resolve(dirname .. '/books/en.json')
   
   local success, file = pcall(io.open, book_dir_path, "r")
@@ -51,7 +51,7 @@ end
 local booksTable = M.load_book_abbreviations()
 
 M.cleanBookName = function(book)
-return book:lower():gsub("%s+", "")
+  return book:lower():gsub("%s+", "")
 end
 
 M.getBook = function(bookName)
