@@ -1,5 +1,5 @@
 require("config.lazy")
--- require("config.lsp")
+require("config.lsp")
 
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
@@ -44,7 +44,7 @@ end, { expr = true })
 -- LSP 
 vim.lsp.enable({
   -- lua
-  "luals",
+  "lua_ls",
   -- nix
   -- "nil_ls",
   "nixd",

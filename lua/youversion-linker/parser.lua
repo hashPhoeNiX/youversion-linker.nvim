@@ -24,7 +24,6 @@ M.extract_bible_reference = function(text)
   if book_name and chapter_verse_range then
     return { book = book_name, chapter_verse_range = chapter_verse_range }
   else
-    -- print(text)
     return nil -- Return nil if the pattern doesn't match
   end
 end
