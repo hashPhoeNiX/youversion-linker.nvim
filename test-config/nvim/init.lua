@@ -26,7 +26,18 @@ vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to upper window' })
 vim.keymap.set('n', '<C-->', '<C-w>-', { desc = 'Resize windom window [up]' })
 vim.keymap.set('n', '<C-==>', '<C-w>+', { desc = 'Resize windom window [down]' })
 
+-- Terminal
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Open a terminal at the bottom of the screen with a fixed height.
+-- vim.keymap.set("n", ",st", function()
+--   vim.cmd.new()
+--   vim.cmd.wincmd "J"
+--   vim.api.nvim_win_set_height(0, 12)
+--   vim.wo.winfixheight = true
+--   vim.cmd.term()
+-- end)
+
 
 -- Run lua files
 vim.keymap.set("n", "<leader><leader>x", function()
@@ -42,25 +53,25 @@ end, { expr = true })
 
 
 -- LSP 
-vim.lsp.enable({
-  -- lua
-  "lua_ls",
-  -- nix
-  -- "nil_ls",
-  "nixd",
-  -- python
-  -- "pyright",
-  -- "ruff",
-  -- markdown
-  -- "ltex",
-  -- terraform
-  -- "terraformls",
-  -- yaml
-  -- "yamlls",
-  -- bash
-  -- "bashls"
-})
-
+-- vim.lsp.enable({
+--   -- lua
+--   "lua_ls",
+--   -- nix
+--   -- "nil_ls",
+--   "nixd",
+--   -- python
+--   -- "pyright",
+--   -- "ruff",
+--   -- markdown
+--   -- "ltex",
+--   -- terraform
+--   -- "terraformls",
+--   -- yaml
+--   -- "yamlls",
+--   -- bash
+--   -- "bashls"
+-- })
+--
 -- Initialize all test plugins
 local plugins = {
 	-- "present",

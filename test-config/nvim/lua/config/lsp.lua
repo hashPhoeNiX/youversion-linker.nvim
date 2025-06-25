@@ -15,10 +15,8 @@ capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 -- Enable servers with specific overrides for Lua
 vim.lsp.enable({
   "lua_ls",
-  "pyright",
-  "ansiblels",
-  "bashls",
-  "gols",
+  -- "pyright",
+  "nixd",
 })
 
 --- This file sets up the LSP client, key mappings, and autocommands for LSP features.
