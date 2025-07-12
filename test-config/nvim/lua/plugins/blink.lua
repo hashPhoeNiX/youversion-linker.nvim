@@ -39,12 +39,19 @@ return {
           enabled = true,
         },
       },
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = false,
+        },
+        cycle = { from_top = false } },
     },
 
     sources = {
-      default = { 'lsp', 'path', 'buffer' },
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
 
     fuzzy = { implementation = "prefer_rust_with_warning" },
   },
+  -- opts_extend = { "sources.default" },
 }

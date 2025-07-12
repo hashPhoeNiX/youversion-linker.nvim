@@ -21,11 +21,14 @@ return {
       },
       diagnostics = {
         globals = { 'vim' },
+        workspaceDelay = -1,
       },
       workspace = {
-        library = vim.api.nvim_get_runtime_file('', true),
+        -- library = vim.api.nvim_get_runtime_file('', true),
         maxPreload = 1000,
         preloadFileSize = 1000,
+        checkThirdParty = false,
+        ignoreSubmodules = true,
       },
       telemetry = { enable = false },
     },

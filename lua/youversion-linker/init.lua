@@ -1,7 +1,7 @@
 local M = {}
 
 M.core = require("youversion-linker.core")
-local plugin = require("youversion-linker.default")
+local plugin = require("lua.youversion-linker.main")
 
 M.setup = function(user_config)
   user_config = user_config or {}

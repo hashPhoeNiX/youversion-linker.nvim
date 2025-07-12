@@ -7,14 +7,16 @@ vim.cmd("set softtabstop=2")
 vim.cmd("set shiftwidth=2")
 vim.cmd("set number")
 vim.cmd("set relativenumber")
+-- vim.cmd("set laststatus=1")
 vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
 vim.opt.termguicolors = true
 
 -- create a keymap for Lazy 
 vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
-
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Insert Escape' })
+vim.keymap.set('i', 'kk', '<Esc>', { desc = 'Insert Escape' })
+
 -- vim.keymap.set('t', 'jk', '<Esc><Esc>', { desc = 'Terminal Escape' })
 -- Directional window movements
 vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
