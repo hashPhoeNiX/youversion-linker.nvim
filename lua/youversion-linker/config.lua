@@ -1,12 +1,12 @@
 local M = {}
 local default_config = {
-  popup_options = {
+  menu_options = {
     enter = false,
     focusable = true,
     relative = "cursor",
     position = {
       row = 1,
-      col = 3,
+      col = 3, --math.floor(vim.o.columns * 0.20), -- convert 20% to absolute position --3,
     },
     size = {
       width = 25,
@@ -25,6 +25,35 @@ local default_config = {
     win_options = {
       winhighlight = "Normal:Normal",
     }
+  },
+}
+
+-- calculating the bible text popup position relative to the menu
+local popup_col = default_config.menu_options.position.col + default_config.menu_options.size.width + 1 -- 3 character spacing
+
+default_config.popup_options = {
+  position = {
+    row = default_config.menu_options.position.row,
+    col = popup_col,
+  },
+  size = {
+    width = 45,
+    height = 15,
+  },
+  relative = "editor",
+  border = {
+    style = "rounded",
+    text = {
+      top = " Bible Text ",
+      top_align = "center",
+    },
+  },
+  win_options = {
+    winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+  },
+  buf_options = {
+    modifiable = false,
+    readonly = true,
   }
 }
 

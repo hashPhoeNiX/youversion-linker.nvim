@@ -17,16 +17,17 @@ M.validateBookName = function(bookName, validBooks)
   return nil, "Invalid book name: " .. bookName
 end
 
-M.buildYouVersionURL = function(parsedRef)
-  -- version = version or "KJV" -- Default version
+M.buildYouVersionURL = function(parsedRef, version)
+  version = version or "KJV" -- Default version
   if not parsedRef then
     return nil, "Parsed reference is required"
   end
 
   local book = lookup.getBook(parsedRef.book)
+  local version_id = lookup.getVersionId('eng', version)
   vim.print(book)
   local bookName = book:lower():gsub("%s+", "-"):gsub("[^%w-]", "")
-  local baseURL = "https://www.bible.com/bible/" .. "1/" .. bookName .. "." .. parsedRef.chapter .. "." .. parsedRef.verseSection:gsub("%s+", "")
+  local baseURL = "https://www.bible.com/bible/" .. tostring(version_id) .. "/" .. bookName .. "." .. parsedRef.chapter .. "." .. parsedRef.verseSection:gsub("%s+", "")
 
   if parsedRef.verse then
     baseURL = baseURL .. "." .. parsedRef.verse

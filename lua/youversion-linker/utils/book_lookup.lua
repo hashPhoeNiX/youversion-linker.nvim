@@ -33,6 +33,35 @@ M.load_book_abbreviations = function()
   return data
 end
 
+M.load_bible_version_ids = function ()
+  local info = debug.getinfo(1, "S")
+  if not info or not info.source then
+    vim.notify("Warning: Could not determine plugin directory", vim.log.levels.WARN)
+    return {}
+  end
+  
+  local source = info.source:match("^@(.+)") or info.source:sub(2)
+  local dirname = vim.fn.fnamemodify(source, ":h")
+  local version_dir_path = vim.fn.resolve(dirname .. '/books/versions.json')
+  
+  local success, file = pcall(io.open, version_dir_path, "r")
+  if not success or not file then
+    vim.notify("Bible book abbreviations not found at: " .. version_dir_path, vim.log.levels.WARN)
+    return {}
+  end
+  
+  local content = file:read("*a")
+  file:close()
+  
+  local decoded_success, data = pcall(cjson.decode, content)
+  if not decoded_success then
+    vim.notify("Failed to parse Bible Version JSON", vim.log.levels.ERROR)
+    return {}
+  end
+  
+  return data
+end
+
 -- local sep = package.config:sub(1, 1)
 -- local dirname = string.sub(debug.getinfo(1).source, 2, string.len('/youversion-linker.lua') * -1)
 -- local book_dir_path = dirname .. 'books/en.json'
@@ -49,6 +78,7 @@ end
 -- end
 
 local booksTable = M.load_book_abbreviations()
+local bibleVersions = M.load_bible_version_ids()
 
 M.cleanBookName = function(book)
   return book:lower():gsub("%s+", "")
@@ -65,6 +95,34 @@ M.getBook = function(bookName)
   end
 
   return nil, "Invalid book name: " .. bookName
+end
+
+-- local function get_id_by_abbreviation(data, lang_key, abbreviation)
+--     local lang = data[lang_key]
+--     if not lang or not lang.data then
+--         return nil, "Language key not found"
+--     end
+--     for _, entry in ipairs(lang.data) do
+--         if entry.abbreviation == abbreviation then
+--             return entry.id
+--         end
+--     end
+--     return nil, "Abbreviation not found"
+-- end
+
+M.getVersionId = function(lang_key, version)
+  lang_key = lang_key or 'eng'
+  local lang = bibleVersions[lang_key]
+  for _, value in pairs(lang.data) do
+    if value.abbreviation == version then
+      return value.id
+    end
+  end
+  
+  vim.notify("ID for bible version: " .. version .. " not found")
+  
+  return nil, "Abbreviation not found: " .. version
+
 end
 
 return M

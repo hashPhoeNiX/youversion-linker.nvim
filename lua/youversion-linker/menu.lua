@@ -13,7 +13,7 @@ M.create_menu_items = function(result)
   for version, opt in pairs(bible_versions) do
     if opt.enabled then
       local display_text = string.format("%s %s - %s", trigger_text, displayBook, version)
-      table.insert(items, 
+      table.insert(items,
         Menu.item(display_text)
       )
     end
