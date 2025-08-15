@@ -41,7 +41,7 @@ return {
       },
       list = {
         selection = {
-          preselect = false,
+          preselect = true,
           auto_insert = false,
         },
         cycle = { from_top = false } },

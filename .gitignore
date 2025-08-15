@@ -1,6 +1,15 @@
 # Compiled Lua sources
 luac.out
 
+# miscs
+new_test.lua
+some-stuff.lua
+test.txt
+test_menu_popup.lua
+test.lua
+nui_test.lua
+test_insert_verse.lua
+
 # luarocks build files
 *.src.rock
 *.zip

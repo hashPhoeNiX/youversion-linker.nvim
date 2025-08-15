@@ -7,3 +7,5 @@ plugin.setup({})
 -- @John 3:16-20
 -- @1 John 5:4
 -- @john 3:12
+-- @Romans 12:1
+

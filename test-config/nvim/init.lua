@@ -31,6 +31,7 @@ vim.keymap.set('n', '<C-==>', '<C-w>+', { desc = 'Resize windom window [down]' }
 -- Terminal
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+
 -- Open a terminal at the bottom of the screen with a fixed height.
 -- vim.keymap.set("n", ",st", function()
 --   vim.cmd.new()

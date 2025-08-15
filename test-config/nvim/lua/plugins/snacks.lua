@@ -132,6 +132,7 @@ return {
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
     { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    ["<leader>-<CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
     -- find
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
