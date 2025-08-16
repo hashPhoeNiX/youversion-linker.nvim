@@ -75,7 +75,20 @@ return {
     scratch = { enabled = true },
     indent = { enabled = true },
     input = { enabled = true },
-    picker = { enabled = true },
+    picker = {
+      enabled = true,
+      hidden =  true,
+      ignored = true,
+      -- sources = {
+      --   files = {
+      --     hidden = true,
+      --     ignored = true,
+      --     -- exclude = {
+      --     -- "**/.git/*",
+      --     --},
+      --   },
+      -- },
+    },
     notifier = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
