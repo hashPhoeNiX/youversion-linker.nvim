@@ -55,7 +55,7 @@ M.create_and_update_bible_passage_popup = function(bible_passage_popup, result, 
 
   local item = items[item_id]
   -- if not item then return end
-  
+
   if not item then
     vim.notify("No item found for ID: " .. tostring(item_id), vim.log.levels.ERROR)
     return
@@ -97,7 +97,6 @@ M.create_and_update_bible_passage_popup = function(bible_passage_popup, result, 
   -- vim.api.nvim_buf_set_option(bible_passage_popup.bufnr, 'modifiable', true)
   -- vim.api.nvim_buf_set_lines(bible_passage_popup.bufnr, 0, -1, false, lines)
   -- vim.api.nvim_buf_set_option(bible_passage_popup.bufnr, 'modifiable', false)
-
 end
 
 M.create_and_show_popup_menu = function(user_config)
@@ -107,7 +106,7 @@ M.create_and_show_popup_menu = function(user_config)
     local trigger_text = result.trigger_text
     local displayBook = result.displayBook
     -- local extracted_reference = result.extracted_reference
-    
+
     local config_options = M.get_config(user_config)
     local menu_options = config_options.menu_options
     local popup_options = config_options.popup_options
@@ -118,7 +117,7 @@ M.create_and_show_popup_menu = function(user_config)
       vim.notify("No enabled Bible versions found", vim.log.levels.WARN)
       return
     end
-    
+
     local items = {}
     for i, item in ipairs(menu_items) do
       table.insert(items, Menu.item(item.text, { id = i }))
@@ -130,10 +129,10 @@ M.create_and_show_popup_menu = function(user_config)
       lines = items,
       max_width = math.max(50, #trigger_text + #displayBook + 20), -- bible passage + display book + version lengths
       keymap = {
-        focus_next = {"j", "<Down>", "<Tab>"},
-        focus_prev = {"k", "<Up>", "<S-Tab>"},
-        close = {"<Esc>", "<C-c>"},
-        submit = {"<CR>", "<Space>"},
+        focus_next = { "j", "<Down>", "<Tab>" },
+        focus_prev = { "k", "<Up>", "<S-Tab>" },
+        close = { "<Esc>", "<C-c>" },
+        submit = { "<CR>", "<Space>" },
       },
       on_close = function()
         vim.notify("Menu closed", vim.log.levels.INFO)
@@ -156,7 +155,7 @@ M.create_and_show_popup_menu = function(user_config)
         local bible_ref = extracted_reference.book .. " " .. extracted_reference.chapter_verse_range
         local version = item.text:match("([^%s]+)$") -- Extract version (last word)
         replacer.replace_line_with_bible_verse(result, bible_ref, item.text, version)
-        current_menu = nil -- clear reference after submission
+        current_menu = nil                           -- clear reference after submission
         current_popup = nil
 
         pcall(vim.keymap.del, 'i', "<S-Tab>")
@@ -173,7 +172,7 @@ M.create_and_show_popup_menu = function(user_config)
 
     menu:mount()
     bible_passage_popup:mount()
-    
+
     if items then
       M.create_and_update_bible_passage_popup(bible_passage_popup, result, items, 1) -- show bible passage of first item initially
     end
