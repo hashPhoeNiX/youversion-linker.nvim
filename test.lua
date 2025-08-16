@@ -8,4 +8,3 @@ plugin.setup({})
 -- @1 John 5:4
 -- @john 3:12
 -- @Romans 12:1
-

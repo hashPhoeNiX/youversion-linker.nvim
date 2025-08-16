@@ -13,9 +13,22 @@ local core = require("youversion-linker.core")
 local api = vim.api
 
 local current_menu = nil
+local current_popup = nil
+
+-- local function close_current_menu()
+--   current_menu = menu_module.close_current_menu(current_menu)
+-- end
 
 local function close_current_menu()
-  current_menu = menu_module.close_current_menu(current_menu)
+  vim.notify("Cleaning up existing popups", vim.log.levels.DEBUG)
+  if current_menu then
+    current_menu:unmount()
+    current_menu = nil
+  end
+  if current_popup then
+    current_popup:unmount()
+    current_popup = nil
+  end
 end
 
 M.get_config = function(user_config)
@@ -125,6 +138,8 @@ M.create_and_show_popup_menu = function(user_config)
       on_close = function()
         vim.notify("Menu closed", vim.log.levels.INFO)
         current_menu = nil -- clear when menu is closed
+        current_popup = nil
+
         pcall(vim.keymap.del, 'i', "<S-Tab>")
       end,
       on_submit = function(item)
@@ -142,6 +157,8 @@ M.create_and_show_popup_menu = function(user_config)
         local version = item.text:match("([^%s]+)$") -- Extract version (last word)
         replacer.replace_line_with_bible_verse(result, bible_ref, item.text, version)
         current_menu = nil -- clear reference after submission
+        current_popup = nil
+
         pcall(vim.keymap.del, 'i', "<S-Tab>")
       end,
       on_change = function(item, node)
@@ -152,13 +169,14 @@ M.create_and_show_popup_menu = function(user_config)
     })
 
     current_menu = menu
+    current_popup = bible_passage_popup
 
     menu:mount()
     bible_passage_popup:mount()
     
-    -- if items then
-    --   M.create_and_update_bible_passage_popup(bible_passage_popup, result, items, 1) -- show bible passage of first item initially
-    -- end
+    if items then
+      M.create_and_update_bible_passage_popup(bible_passage_popup, result, items, 1) -- show bible passage of first item initially
+    end
 
     vim.keymap.set("i", "<S-Tab>", function()
       if current_menu and current_menu.winid then
@@ -175,6 +193,7 @@ M.create_and_show_popup_menu = function(user_config)
       menu:unmount()
       bible_passage_popup:unmount()
       current_menu = nil
+      current_popup = nil
       pcall(vim.keymap.del, 'i', "<S-Tab>")
     end)
   else
