@@ -8,8 +8,13 @@ M.extract_bible_reference = function(text)
   if not success then
     vim.notify("The input is not a valid bible reference", vim.log.levels.ERROR)
   end
-  
-  local parsed_reference = regex_utils.parseBookChapterVerses(bible_reference)
+
+  local ref_success, parsed_reference = pcall(regex_utils.parseBookChapterVerses, bible_reference)
+  if not ref_success then
+    vim.notify("Bible Reference" .. bible_reference .. " not found", vim.log.levels.ERROR)
+    -- return nil
+  end
+
   local book_name = parsed_reference.book
   local chapter_verse_range
 

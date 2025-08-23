@@ -8,57 +8,57 @@ M.load_book_abbreviations = function()
     vim.notify("Warning: Could not determine plugin directory", vim.log.levels.WARN)
     return {}
   end
-  
+
   local source = info.source:match("^@(.+)") or info.source:sub(2)
   -- print(source)
   local dirname = vim.fn.fnamemodify(source, ":h")
   -- print(dirname)
   local book_dir_path = vim.fn.resolve(dirname .. '/books/en.json')
-  
+
   local success, file = pcall(io.open, book_dir_path, "r")
   if not success or not file then
     vim.notify("Bible book abbreviations not found at: " .. book_dir_path, vim.log.levels.WARN)
     return {}
   end
-  
+
   local content = file:read("*a")
   file:close()
-  
+
   local decoded_success, data = pcall(cjson.decode, content)
   if not decoded_success then
     vim.notify("Failed to parse Bible book abbreviations JSON", vim.log.levels.ERROR)
     return {}
   end
-  
+
   return data
 end
 
-M.load_bible_version_ids = function ()
+M.load_bible_version_ids = function()
   local info = debug.getinfo(1, "S")
   if not info or not info.source then
     vim.notify("Warning: Could not determine plugin directory", vim.log.levels.WARN)
     return {}
   end
-  
+
   local source = info.source:match("^@(.+)") or info.source:sub(2)
   local dirname = vim.fn.fnamemodify(source, ":h")
   local version_dir_path = vim.fn.resolve(dirname .. '/books/versions.json')
-  
+
   local success, file = pcall(io.open, version_dir_path, "r")
   if not success or not file then
     vim.notify("Bible book abbreviations not found at: " .. version_dir_path, vim.log.levels.WARN)
     return {}
   end
-  
+
   local content = file:read("*a")
   file:close()
-  
+
   local decoded_success, data = pcall(cjson.decode, content)
   if not decoded_success then
     vim.notify("Failed to parse Bible Version JSON", vim.log.levels.ERROR)
     return {}
   end
-  
+
   return data
 end
 
@@ -81,6 +81,9 @@ local booksTable = M.load_book_abbreviations()
 local bibleVersions = M.load_bible_version_ids()
 
 M.cleanBookName = function(book)
+  if not book then
+    return ""
+  end
   return book:lower():gsub("%s+", "")
 end
 
@@ -118,11 +121,10 @@ M.getVersionId = function(lang_key, version)
       return value.id
     end
   end
-  
-  vim.notify("ID for bible version: " .. version .. " not found")
-  
-  return nil, "Abbreviation not found: " .. version
 
+  vim.notify("ID for bible version: " .. version .. " not found")
+
+  return nil, "Abbreviation not found: " .. version
 end
 
 return M

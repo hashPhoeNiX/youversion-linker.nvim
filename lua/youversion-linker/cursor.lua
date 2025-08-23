@@ -10,11 +10,11 @@ M.get_current_line = function()
   local line_number, col = unpack(api.nvim_win_get_cursor(buf))
   local row = line_number - 1 -- row based
 
-  local trigger = line:sub(col+1, col+1)
+  local trigger = line:sub(col + 1, col + 1)
   local before = line:sub(1, col + 1) -- Get prefix of the cursor position
   local after = line:sub(col + 2, -1) -- Get suffix of the cursor position
 
-  print(trigger .. after)
+  -- print(trigger .. after)
   local trigger_info = parser.find_trigger_and_text(line, col)
 
   if not trigger_info.has_trigger then
@@ -22,9 +22,9 @@ M.get_current_line = function()
   end
 
   local trigger_text = trigger_info.trigger_text
-  local extracted_reference = parser.extract_bible_reference(trigger_text)
-  print(extracted_reference)
-  if not extracted_reference then
+  local success, extracted_reference = pcall(parser.extract_bible_reference, trigger_text)
+  -- print(extracted_reference)
+  if not extracted_reference and not success then
     return {
       buf = buf,
       line = line,

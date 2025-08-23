@@ -1,5 +1,8 @@
 local M = {}
 local default_config = {
+  debounce_delay = 20,
+  filetypes = { "*.md", "*.txt" },
+  popup_char_spacing = 2,
   menu_options = {
     enter = false,
     focusable = true,
@@ -29,7 +32,8 @@ local default_config = {
 }
 
 -- calculating the bible text popup position relative to the menu
-local popup_col = default_config.menu_options.position.col + default_config.menu_options.size.width + 2 -- 3 character spacing
+local popup_col = default_config.menu_options.position.col + default_config.menu_options.size.width +
+default_config.popup_char_spacing
 
 default_config.popup_options = {
   position = {
