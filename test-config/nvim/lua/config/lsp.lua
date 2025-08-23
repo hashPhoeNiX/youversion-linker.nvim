@@ -28,3 +28,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end,
 })
+
+vim.diagnostic.enable(true)
+vim.diagnostic.config({
+  -- signs = true,
+  virtual_text = true,
+})

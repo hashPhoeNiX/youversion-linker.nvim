@@ -12,7 +12,6 @@ return {
     'stylua.toml',
     '.git',
   },
-  -- Fix Undefined global 'vim'
   settings = {
     Lua = {
       runtime = {
@@ -25,6 +24,7 @@ return {
       },
       workspace = {
         -- library = vim.api.nvim_get_runtime_file('', true),
+        library = { vim.env.VIMRUNTIME },
         maxPreload = 1000,
         preloadFileSize = 1000,
         checkThirdParty = false,
