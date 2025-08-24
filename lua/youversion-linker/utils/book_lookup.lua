@@ -97,7 +97,7 @@ M.getBook = function(bookName)
     end
   end
 
-  return nil, "Invalid book name: " .. bookName
+  return nil, "Invalid book name: " .. tostring(bookName)
 end
 
 -- local function get_id_by_abbreviation(data, lang_key, abbreviation)

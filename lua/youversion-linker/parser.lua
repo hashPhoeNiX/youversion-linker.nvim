@@ -24,12 +24,10 @@ M.extract_bible_reference = function(text)
     chapter_verse_range = tostring(parsed_reference.chapter)
   end
 
-  -- local book_name, chapter_verse_range = text:match("^([%a%s]+)%s(%d+:%d+[%-%d]*)" )
-
   if book_name and chapter_verse_range then
     return { book = book_name, chapter_verse_range = chapter_verse_range }
   else
-    return nil -- Return nil if the pattern doesn't match
+    return nil
   end
 end
 

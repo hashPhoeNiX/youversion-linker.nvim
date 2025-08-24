@@ -17,10 +17,10 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
   local after_cursor = line:sub(col + 1, -1)
 
   local new_lines = {
-    "--[[",
+    "",
     item_text,
     result.verses,
-    "]]",
+    "",
   }
 
   api.nvim_buf_set_lines(
