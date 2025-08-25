@@ -16,7 +16,7 @@
 @John 3:16
 
 @John 3:16
-[^John3:12JHN-KJV]
----
-[^John3:12JHN-KJV] [John3:12JHN-KJV](https://www.bible.com/bible/1/jhn.3.12)
-If I have told you earthly things, and ye believe not, how shall ye believe, if I tell you of heavenly things?
+[^John2:12JHN-NIV]
+
+[^John2:12JHN-NIV]: [John2:12JHN-NIV](https://www.bible.com/bible/111/jhn.2.12) After this he went down to Capernaum with his mother and brothers and his disciples. There they stayed for a few days.
+

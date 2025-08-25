@@ -64,14 +64,15 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
       false,
       {
         "[" .. trigger_char .. item_text .. "]",
+        ""
       }
     )
 
     new_lines = {
       "[" ..
       trigger_char ..
-      item_text .. "]" .. " " .. "[" .. item_text .. "]" .. "(" .. result.url .. ")",
-      result.verses,
+      item_text .. "]" .. ": " .. "[" .. item_text .. "]" .. "(" .. result.url .. ")" .. " " .. result.verses,
+      ""
     }
 
     new_line_number = last_line_idx + 1
