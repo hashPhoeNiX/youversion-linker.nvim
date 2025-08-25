@@ -63,7 +63,7 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
       line_number - 1, line_number,
       false,
       {
-        "[" .. trigger_char .. item_text .. "]",
+        before_trigger .. "[" .. trigger_char .. item_text .. "]",
         ""
       }
     )

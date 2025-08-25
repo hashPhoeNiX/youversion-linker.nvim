@@ -16,7 +16,13 @@
 @John 3:16
 
 @John 3:16
-[^John2:12JHN-NIV]
+
+[^John3:16JHN-NKJV]
+
+For God so love the world[^John3:16JHN-KJV]
+
 
 [^John2:12JHN-NIV]: [John2:12JHN-NIV](https://www.bible.com/bible/111/jhn.2.12) After this he went down to Capernaum with his mother and brothers and his disciples. There they stayed for a few days.
+
+[^John3:16JHN-KJV]: [John3:16JHN-KJV](https://www.bible.com/bible/1/jhn.3.16) For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.
 
