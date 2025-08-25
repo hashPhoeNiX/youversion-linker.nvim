@@ -33,7 +33,7 @@ local default_config = {
 
 -- calculating the bible text popup position relative to the menu
 local popup_col = default_config.menu_options.position.col + default_config.menu_options.size.width +
-default_config.popup_char_spacing
+    default_config.popup_char_spacing
 
 default_config.popup_options = {
   position = {
@@ -59,6 +59,14 @@ default_config.popup_options = {
     modifiable = false,
     readonly = true,
   }
+}
+
+default_config.bible_versions = {
+  NIV = { enabled = false },
+  KJV = { enabled = true },
+  NKJV = { enabled = true },
+  NLT = { enabled = false },
+  AMP = { enabled = true },
 }
 
 local config = vim.tbl_deep_extend("force", default_config, {})

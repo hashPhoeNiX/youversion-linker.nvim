@@ -90,7 +90,7 @@ M.create_and_update_bible_passage_popup = function(bible_passage_popup, result, 
 end
 
 M.create_and_show_popup_menu = function(user_config)
-  local result = cursor.get_current_line()
+  local result = cursor.get_current_line(user_config)
   if result then
     local trigger_text = result.trigger_text
     if not result.extracted_reference then

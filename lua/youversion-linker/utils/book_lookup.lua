@@ -1,4 +1,9 @@
-local cjson = require("cjson.safe")
+local ok, cjson = pcall(require, "cjson.safe")
+
+if not ok then
+  vim.notify("Missing 'cjson' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
+  return nil
+end
 
 local M = {}
 

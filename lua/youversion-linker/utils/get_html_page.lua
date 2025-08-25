@@ -1,7 +1,12 @@
+-- local pl = require("pl.pretty")
+local ok, http = pcall(require, "socket.http")
+-- local cjson = require("cjson.safe")
 
-local pl = require("pl.pretty")
-local http = require("socket.http")
-local cjson = require("cjson.safe")
+if not ok then
+  vim.notify("Missing 'luasocket' dependency! Please check the documentation for instructions to install.",
+    vim.log.levels.ERROR)
+  return nil
+end
 
 http.TIMEOUT = 10 --set timeout to 10 seconds
 

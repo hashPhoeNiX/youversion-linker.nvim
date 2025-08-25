@@ -9,6 +9,8 @@ For God so loved the world that He gave His only begotten Son, that whoever beli
 [^John 3:16 JHN - NLT]
 [^John 1:1-5 JHN - AMP]
 [^John5:4JHN-NKJV]
+[^Matthew6:33MAT-NKJV]
+[^John3:14JHN-NKJV]
 
 
 
@@ -25,4 +27,6 @@ If you are a thief, quit stealing. Instead, use your hands for good hard work, a
 [^John 3:12] [John 3:12 JHN - KJV](https://www.bible.com/bible/1/jhn.3.12)
 [^John 3:14] [John 3:14 JHN - KJV](https://www.bible.com/bible/1/jhn.3.14)
 [^John5:4JHN-NKJV] [John5:4JHN-NKJV](https://www.bible.com/bible/114/jhn.5.4)
-For an angel went down at a certain time into the pool and stirred up the water; then whoever stepped in first, after the stirring of the water, was made well of whatever disease he had.
+[^Matthew6:33MAT-NKJV]: [Matthew6:33MAT-NKJV](https://www.bible.com/bible/114/mat.6.33) But seek first the kingdom of God and His righteousness, and all these things shall be added to you.
+[^John3:14JHN-NKJV]: [John3:14JHN-NKJV](https://www.bible.com/bible/114/jhn.3.14) And as Moses lifted up the serpent in the wilderness, even so must the Son of Man be lifted up
+

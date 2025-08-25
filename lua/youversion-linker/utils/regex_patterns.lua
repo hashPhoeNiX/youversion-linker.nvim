@@ -1,5 +1,9 @@
+local ok, rex = pcall(require, "rex_pcre")
 
-local rex = require("rex_pcre")
+if not ok then
+  vim.notify("Missing 'lrexlib-pcre' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
+  return nil
+end
 
 -- ===================================================================
 -- YOUVERSION LINKER PLUGIN - COMPLETE REGEX PATTERNS IN LUA
@@ -44,7 +48,7 @@ local rangeSeparatorRegex = "[-–—]+"
 -- 4. Combination of 2 and 3 for extracting book, chapter, and verse
 local extractPattern = [[
   (\d?\s*\p{L}+(?:\s+\p{L}+)*)  # Capture book name (with optional leading number)
-  \s+                            # Space separator  
+  \s+                            # Space separator
   (\d{1,3})                      # Capture chapter number
   (?:[:.](.+))?                  # Capture everything after colon/period as verse section
 ]]
@@ -52,10 +56,10 @@ local extractPattern = [[
 local bookChapterVersesRegex = extractPattern:gsub("%s*#[^\r\n]*", ""):gsub("[\r\n%s]+", "")
 
 return {
-  linkRegex = cleanLinkRegex, -- Main link detection pattern
-  bookRegex = bookRegex,     -- Book name pattern
-  testBookRegex = testBookRegex, -- Exact book name match
+  linkRegex = cleanLinkRegex,                      -- Main link detection pattern
+  bookRegex = bookRegex,                           -- Book name pattern
+  testBookRegex = testBookRegex,                   -- Exact book name match
   bookChapterVersesRegex = bookChapterVersesRegex, -- Book, chapter, and verses extraction
-  chapterSeparatorRegex = chapterSeparatorRegex, -- Chapter separator
-  rangeSeparatorRegex = rangeSeparatorRegex,     -- Range separator
+  chapterSeparatorRegex = chapterSeparatorRegex,   -- Chapter separator
+  rangeSeparatorRegex = rangeSeparatorRegex,       -- Range separator
 }

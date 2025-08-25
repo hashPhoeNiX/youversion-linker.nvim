@@ -1,7 +1,13 @@
 -- ===================================================================
 -- UTILITY FUNCTIONS FOR THE PLUGIN WORKFLOW
 -- ===================================================================
-local rex = require("rex_pcre")
+local ok, rex = pcall(require, "rex_pcre")
+
+if not ok then
+  vim.notify("Missing 'lrexlib-pcre' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
+  return nil
+end
+
 local regex = require("youversion-linker.utils.regex_patterns")
 
 local M = {}
@@ -26,11 +32,11 @@ end
 M.parseBookChapterVerses = function(reference)
   local book, chapter, verseSection = rex.match(reference, bookChapterVersesRegex)
   if book and chapter then
-      local result = {
-        book = book,
-        chapter = tonumber(chapter),
-        verseSection = verseSection,
-      }
+    local result = {
+      book = book,
+      chapter = tonumber(chapter),
+      verseSection = verseSection,
+    }
     return result
   else
     return nil
