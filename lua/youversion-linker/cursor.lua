@@ -31,6 +31,7 @@ M.get_current_line = function()
       line_number = line_number,
       col = col,
       trigger_pos = trigger_info.trigger_pos,
+      trigger_char = trigger_info.trigger_char,
       trigger_text = trigger_text,
       displayBook = trigger_text, -- Use typed text as display
       bible_versions = core.get_bible_versions(),
@@ -38,13 +39,14 @@ M.get_current_line = function()
     }
   end
 
-  local displayBook = core.lookup.getBook(extracted_reference.book)
+  local ok, displayBook = pcall(core.lookup.getBook, extracted_reference.book)
   return {
     buf = buf,
     line = line,
     line_number = line_number,
     col = col,
     trigger_pos = trigger_info.trigger_pos,
+    trigger_char = trigger_info.trigger_char,
     trigger_text = trigger_text,
     displayBook = displayBook,
     bible_versions = core.get_bible_versions(),

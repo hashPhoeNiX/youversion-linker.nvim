@@ -16,6 +16,7 @@ local function main(reference, version)
   local verse_data = utils.extract_verse.parse_json(json_data)
   verse_data.url = url
   verse_data.parsedReference = parsed
+  verse_data.bible_reference = bible_reference
 
   return verse_data
 end

@@ -34,11 +34,12 @@ end
 M.find_trigger_and_text = function(line, cursor_col)
   for i = cursor_col, 1, -1 do
     local char = line:sub(i, i)
-    if char == "@" then
+    if char == ">" or char == "@" or char == "^" then
       local trigger_text = line:sub(i + 1, cursor_col)
       return {
         trigger_pos = i,
         trigger_text = trigger_text,
+        trigger_char = char,
         has_trigger = true
       }
     elseif char:match("%s") then
