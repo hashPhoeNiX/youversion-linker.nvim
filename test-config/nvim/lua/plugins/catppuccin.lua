@@ -1,6 +1,6 @@
--- return { 
---   "catppuccin/nvim", 
---   name = "catppuccin", 
+-- return {
+--   "catppuccin/nvim",
+--   name = "catppuccin",
 --   priority = 1000,
 --   config = function()
 --     vim.cmd.colorscheme("catppuccin-mocha")
@@ -315,7 +315,7 @@ return {
             ["@text.title"] = { link = "TSTitle" },
             ["@text.todo"] = { link = "TSTodo" },
             ["@text.todo.checked"] = { link = "Green" },
-            ["@text.todo.unchecked"] = { link = "Ignore" },
+            ["@text.todo.unchecked"] = { link = "Ignore" }, -- original: Ignore
             ["@text.underline"] = { link = "TSUnderline" },
             ["@text.uri"] = { link = "TSURI" },
             ["@text.warning"] = { link = "TSWarning" },
