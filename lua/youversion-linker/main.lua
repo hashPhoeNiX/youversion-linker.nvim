@@ -14,6 +14,8 @@ local api = vim.api
 
 local current_menu = nil
 local current_popup = nil
+local bible_passages_cache = {} -- Cache for pre-fetched passages
+local current_selected_id = 1   -- Track currently selected menu item ID
 
 local function close_current_menu()
   -- vim.notify("Cleaning up existing popups", vim.log.levels.DEBUG)
@@ -25,6 +27,8 @@ local function close_current_menu()
     current_popup:unmount()
     current_popup = nil
   end
+  bible_passages_cache = {} -- Clear cache when menu closes
+  current_selected_id = 1   -- Reset selected ID
 end
 
 M.get_config = function(user_config)
@@ -32,49 +36,129 @@ M.get_config = function(user_config)
   return config_opts
 end
 
-M.create_and_update_bible_passage_popup = function(bible_passage_popup, result, items, item_id)
+-- Asynchronous Bible passage fetcher
+local function fetch_bible_passage_async(result, item, item_id, callback)
+  vim.schedule(function()
+    local extracted_reference = result.extracted_reference
+    if not extracted_reference then
+      extracted_reference = parser.extract_bible_reference(item.text)
+    end
+
+    if extracted_reference and extracted_reference.book then
+      local bible_ref = (extracted_reference.book or result.trigger_text) ..
+          " " .. (extracted_reference.chapter_verse_range or "")
+
+      local version = item.text:match("([^%s]+)$") -- Extract version (last word)
+
+      local success, bible_text = pcall(function()
+        local core_result = core.main(bible_ref, version)
+        return core_result and core_result.verses or nil
+      end)
+
+      local passage_data
+      if success and bible_text then
+        passage_data = {
+          text = bible_text,
+          reference = item.text,
+          loaded = true
+        }
+        vim.notify("✓ Loaded: " .. item.text, vim.log.levels.DEBUG)
+      else
+        passage_data = {
+          text = "Error fetching Bible text for " .. bible_ref .. " (" .. version .. ")",
+          reference = item.text,
+          loaded = true,
+          error = true
+        }
+        vim.notify("✗ Failed: " .. item.text, vim.log.levels.WARN)
+      end
+
+      callback(item_id, passage_data)
+    else
+      callback(item_id, {
+        text = "Could not parse Bible reference",
+        reference = item.text,
+        loaded = true,
+        error = true
+      })
+    end
+  end)
+end
+
+-- Initialize cache with loading placeholders and start async fetching
+local function initialize_bible_passages_async(result, menu_items, bible_passage_popup)
+  -- Initialize cache with loading placeholders
+  for i, item in ipairs(menu_items) do
+    bible_passages_cache[i] = {
+      text = "Loading Bible passage...",
+      reference = item.text,
+      loaded = false
+    }
+  end
+
+  local total_items = #menu_items
+  local loaded_count = 0
+
+  vim.notify("Loading Bible passages for " .. total_items .. " versions...", vim.log.levels.INFO)
+
+  -- Callback function for when each passage is fetched
+  local function on_passage_loaded(item_id, passage_data)
+    bible_passages_cache[item_id] = passage_data
+    loaded_count = loaded_count + 1
+
+    -- Update popup if this is the currently selected item
+    if current_menu and current_popup and current_selected_id == item_id then
+      M.update_bible_passage_popup(bible_passage_popup, bible_passages_cache, item_id)
+    end
+
+    -- Show progress notification
+    if loaded_count == total_items then
+      local error_count = 0
+      for _, passage in pairs(bible_passages_cache) do
+        if passage.error then
+          error_count = error_count + 1
+        end
+      end
+
+      if error_count == 0 then
+        vim.notify("✓ All Bible passages loaded successfully!", vim.log.levels.INFO)
+      else
+        vim.notify(string.format("✓ Bible passages loaded (%d successful, %d failed)",
+          total_items - error_count, error_count), vim.log.levels.INFO)
+      end
+    elseif loaded_count % 3 == 0 then -- Show progress every 3 items
+      vim.notify(string.format("Loading... %d/%d", loaded_count, total_items), vim.log.levels.DEBUG)
+    end
+  end
+
+  -- Start async fetching for all items
+  for i, item in ipairs(menu_items) do
+    -- Add small delays between requests to avoid overwhelming the API
+    -- vim.defer_fn(function()
+    fetch_bible_passage_async(result, item, i, on_passage_loaded)
+    -- end, (i - 1) * 10) -- 10ms delay between each request
+  end
+end
+
+-- Updated function to use cached passages (handles loading states)
+M.update_bible_passage_popup = function(bible_passage_popup, bible_passages, item_id)
   if not bible_passage_popup or not bible_passage_popup.winid or not vim.api.nvim_win_is_valid(bible_passage_popup.winid) then
     return
   end
 
-  local item = items[item_id]
-  if not item then
-    vim.notify("No item found for ID: " .. tostring(item_id), vim.log.levels.ERROR)
+  local passage_data = bible_passages[item_id]
+  if not passage_data then
+    vim.notify("No passage data found for ID: " .. tostring(item_id), vim.log.levels.ERROR)
     return
   end
 
-  local extracted_reference = result.extracted_reference
-  if not extracted_reference then
-    extracted_reference = parser.extract_bible_reference(item.text)
-    if not extracted_reference then
-      vim.notify("Could not parse Bible reference", vim.log.levels.ERROR)
-      return
-    end
+  local lines = { passage_data.reference, passage_data.text }
+
+  -- Add loading indicator if still loading
+  if not passage_data.loaded then
+    lines[2] = passage_data.text .. " ⏳"
   end
 
-  if not extracted_reference.book then
-    return
-  end
-
-  local bible_ref = (extracted_reference.book or result.trigger_text) ..
-      " " .. (extracted_reference.chapter_verse_range or "")
-
-  local version = item.text:match("([^%s]+)$") -- Extract version (last word)
-  -- vim.notify("Bible ref: " .. bible_ref .. " Version: " .. version)
-  local bible_text
-  local success, _result = pcall(function()
-    return core.main(bible_ref, version).verses
-  end)
-  if not success or not _result then
-    bible_text = "Error fetching Bible text for " .. bible_ref .. " (" .. version .. ")"
-    vim.notify(bible_text, vim.log.levels.ERROR)
-  else
-    bible_text = _result
-  end
-  -- vim.notify("Bible text fetched: " .. (bible_text or "nil"), vim.log.levels.DEBUG)
-
-  local lines = { item.text, bible_text or "No text available" }
-  -- vim.notify("Setting popup lines: " .. vim.inspect(lines), vim.log.levels.DEBUG)
   -- Set the 'modifiable' option to true
   vim.api.nvim_set_option_value('modifiable', true, { buf = bible_passage_popup.bufnr })
 
@@ -83,10 +167,6 @@ M.create_and_update_bible_passage_popup = function(bible_passage_popup, result, 
 
   -- Set the 'modifiable' option to false
   vim.api.nvim_set_option_value('modifiable', false, { buf = bible_passage_popup.bufnr })
-
-  -- vim.api.nvim_buf_set_option(bible_passage_popup.bufnr, 'modifiable', true)
-  -- vim.api.nvim_buf_set_lines(bible_passage_popup.bufnr, 0, -1, false, lines)
-  -- vim.api.nvim_buf_set_option(bible_passage_popup.bufnr, 'modifiable', false)
 end
 
 M.create_and_show_popup_menu = function(user_config)
@@ -116,6 +196,9 @@ M.create_and_show_popup_menu = function(user_config)
     end
 
     local bible_passage_popup = Popup(popup_options)
+
+    -- Initialize async fetching (this sets up loading placeholders immediately)
+    initialize_bible_passages_async(result, menu_items, bible_passage_popup)
 
     local menu = Menu(menu_options, {
       lines = items,
@@ -152,9 +235,9 @@ M.create_and_show_popup_menu = function(user_config)
         pcall(vim.keymap.del, { 'i', 'n' }, "<S-Tab>")
       end,
       on_change = function(item, node)
-        -- vim.notify("Menu on_change: item.id = " .. tostring(item.id), vim.log.levels.DEBUG)
-        -- vim.notify("Menu on_change: item = " .. vim.inspect(item), vim.log.levels.DEBUG)
-        M.create_and_update_bible_passage_popup(bible_passage_popup, result, items, item.id)
+        -- Track the currently selected item ID
+        current_selected_id = item.id
+        M.update_bible_passage_popup(bible_passage_popup, bible_passages_cache, item.id)
       end,
     })
 
@@ -164,8 +247,9 @@ M.create_and_show_popup_menu = function(user_config)
     menu:mount()
     bible_passage_popup:mount()
 
-    if items then
-      M.create_and_update_bible_passage_popup(bible_passage_popup, result, items, 1) -- show bible passage of first item initially
+    -- Show the first Bible passage initially
+    if bible_passages_cache[1] then
+      M.update_bible_passage_popup(bible_passage_popup, bible_passages_cache, 1)
     end
 
     vim.keymap.set({ "i", "n" }, "<S-Tab>", function()

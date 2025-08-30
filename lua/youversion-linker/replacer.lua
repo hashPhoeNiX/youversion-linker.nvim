@@ -35,16 +35,15 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
   local new_line_number
   if trigger_char == ">" then
     new_lines = {
-      "",
-      vim.trim(item_text),
-      result.verses,
+      ">" .. "[!Bible] [" .. vim.trim(item_text) .. "]" .. "(" .. result.url .. ")",
+      ">" .. result.verses,
       "",
     }
     new_line_number = line_number
   elseif trigger_char == '@' then
     new_lines = {
       "[" .. vim.trim(item_text) .. "]" .. "(" .. result.url .. ")",
-      ""
+      -- ""
     }
     new_line_number = line_number
   elseif trigger_char == '^' then
@@ -64,7 +63,7 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
       false,
       {
         before_trigger .. "[" .. trigger_char .. item_text .. "]",
-        ""
+        -- ""
       }
     )
 
