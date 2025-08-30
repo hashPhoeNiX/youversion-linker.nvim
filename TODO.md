@@ -7,22 +7,16 @@
 
 
 [2025-06-19 00:50]
-
-[ ] Adjust popup to fetch the bible passage from the display text and parse that into the function to fetch the verse
+- [x] Adjust popup to fetch the bible passage from the display text and parse that into the function to fetch the verse
 [ ] Add a trigger for character detection
-[ ] Auto update popup as letters are being typed
-[ ] Fix issue of reading books that starts with numbers, such as 1 John, etc.
+- [x] Auto update menu popup as letters are being typed
+- [x] Fix issue of reading books that starts with numbers, such as 1 John, etc.
 
-@John 3:16
-
-@John 3:16
-
-[^John3:16JHN-NKJV]
-
-For God so love the world[^John3:16JHN-KJV]
-
-
-[^John2:12JHN-NIV]: [John2:12JHN-NIV](https://www.bible.com/bible/111/jhn.2.12) After this he went down to Capernaum with his mother and brothers and his disciples. There they stayed for a few days.
-
-[^John3:16JHN-KJV]: [John3:16JHN-KJV](https://www.bible.com/bible/1/jhn.3.16) For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.
+[2025-08-26 23:44]
+- [-] add caching for popup bible text display
+- [-] find a faster alternative to luasocket fetching the bible.com page
+- [-] code refactor
+- [-] update readme
+- [-] add documentation
+- [-] Test plugin with obsidian nvim
 
