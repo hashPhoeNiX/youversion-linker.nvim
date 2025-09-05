@@ -1,10 +1,10 @@
-local ok, cjson = pcall(require, "cjson.safe")
-
-if not ok then
-  vim.notify("Missing 'cjson' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
-  return {}
-end
-
+-- local ok, cjson = pcall(require, "cjson.safe")
+--
+-- if not ok then
+--   vim.notify("Missing 'cjson' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
+--   return {}
+-- end
+--
 local M = {}
 
 local function load_json_file(path, error_context)
@@ -17,7 +17,7 @@ local function load_json_file(path, error_context)
   local content = file:read("*a")
   file:close()
 
-  local decoded_success, data_or_err = pcall(cjson.decode, content)
+  local decoded_success, data_or_err = pcall(vim.json.decode, content)
   if not decoded_success then
     vim.notify("Failed to parse " .. error_context .. " JSON: " .. tostring(data_or_err), vim.log.levels.ERROR)
     return {}

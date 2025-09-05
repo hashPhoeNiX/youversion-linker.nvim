@@ -11,7 +11,7 @@ nui_test.lua
 test_insert_verse.lua
 dbt-project.md
 github-copilot
-
+ignored-test.md
 # luarocks build files
 *.src.rock
 *.zip

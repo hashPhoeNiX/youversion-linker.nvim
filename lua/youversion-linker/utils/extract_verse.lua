@@ -1,9 +1,9 @@
-local ok, cjson = pcall(require, "cjson.safe")
-if not ok then
-  vim.notify("Missing 'cjson' dependency! Please check the documentation for instructions to install.",
-    vim.log.levels.ERROR)
-  return nil
-end
+-- local ok, cjson = pcall(require, "cjson.safe")
+-- if not ok then
+--   vim.notify("Missing 'cjson' dependency! Please check the documentation for instructions to install.",
+--     vim.log.levels.ERROR)
+--   return nil
+-- end
 
 local function extract_verse_lua(html)
   if not html or html == "" then
@@ -30,7 +30,7 @@ local function extract_verse_lua(html)
 end
 
 local function parse_json(raw_json)
-  local data = cjson.decode(raw_json)
+  local data = vim.json.decode(raw_json)
   local title = data.props.pageProps.referenceTitle.title
   local version = data.props.pageProps.version.local_abbreviation
   local raw_verses = data.props.pageProps.verses
