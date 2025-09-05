@@ -1,5 +1,6 @@
 require("config.lazy")
 require("config.lsp")
+require("config.lsp-keymaps")
 
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
@@ -12,7 +13,7 @@ vim.cmd("set clipboard=unnamedplus")
 vim.g.mapleader = " "
 vim.opt.termguicolors = true
 
--- create a keymap for Lazy 
+-- create a keymap for Lazy
 vim.keymap.set('n', '<leader>l', function() require('lazy').home() end, { desc = 'Lazy' })
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Insert Escape' })
 vim.keymap.set('i', 'kk', '<Esc>', { desc = 'Insert Escape' })
@@ -55,7 +56,7 @@ vim.keymap.set("n", "<leader><leader>x", function()
 end, { expr = true })
 
 
--- LSP 
+-- LSP
 -- vim.lsp.enable({
 --   -- lua
 --   "lua_ls",
@@ -77,16 +78,16 @@ end, { expr = true })
 --
 -- Initialize all test plugins
 local plugins = {
-	-- "present",
-    -- "at_popup",
-	-- Add new plugin names here matching what you defined in devenv.nix
+  -- "present",
+  -- "at_popup",
+  -- Add new plugin names here matching what you defined in devenv.nix
 }
 
 for _, plugin in ipairs(plugins) do
-	local status, _ = pcall(require, plugin)
-	if not status then
-		vim.notify("Failed to load plugin: " .. plugin, vim.log.levels.WARN)
-	end
+  local status, _ = pcall(require, plugin)
+  if not status then
+    vim.notify("Failed to load plugin: " .. plugin, vim.log.levels.WARN)
+  end
 end
 
 -- Example plugin configuration

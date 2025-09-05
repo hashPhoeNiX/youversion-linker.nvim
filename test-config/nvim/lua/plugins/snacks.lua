@@ -77,7 +77,7 @@ return {
     input = { enabled = true },
     picker = {
       enabled = true,
-      hidden =  true,
+      hidden = true,
       ignored = true,
       -- sources = {
       --   files = {
@@ -95,9 +95,9 @@ return {
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    terminal = { 
-      win = { style = "terminal" }, 
-      enabled = true 
+    terminal = {
+      win = { style = "terminal" },
+      enabled = true
     },
     zen = {
       ---@class snacks.zen.Config
@@ -139,32 +139,32 @@ return {
   },
   keys = {
     -- Top Pickers & Explorer
-    { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
-    { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
-    { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
-    { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
-    { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+    { "<leader><space>", function() Snacks.picker.smart() end,           desc = "Smart Find Files" },
+    { "<leader>,",       function() Snacks.picker.buffers() end,         desc = "Buffers" },
+    { "<leader>/",       function() Snacks.picker.grep() end,            desc = "Grep" },
+    { "<leader>:",       function() Snacks.picker.command_history() end, desc = "Command History" },
+    { "<leader>n",       function() Snacks.picker.notifications() end,   desc = "Notification History" },
+    { "<leader>e",       function() Snacks.explorer() end,               desc = "File Explorer" },
     ["<leader>-<CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
     -- find
-    { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
-    { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+    { "<leader>fb", function() Snacks.picker.buffers() end,               desc = "Buffers" },
+    { "<leader>fp", function() Snacks.picker.projects() end,              desc = "Projects" },
+    { "<leader>fr", function() Snacks.picker.recent() end,                desc = "Recent" },
     -- LSP
-    { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
-    { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
-    { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
-    { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
-    { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-    { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
+    { "gd",         function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
+    { "gD",         function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
+    { "gr",         function() Snacks.picker.lsp_references() end,        nowait = true,                  desc = "References" },
+    { "gI",         function() Snacks.picker.lsp_implementations() end,   desc = "Goto Implementation" },
+    { "gy",         function() Snacks.picker.lsp_type_definitions() end,  desc = "Goto T[y]pe Definition" },
+    { "<leader>ss", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
     { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
     -- Search
-    { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
-    { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+    { "<leader>sa", function() Snacks.picker.autocmds() end,              desc = "Autocmds" },
+    { "<leader>sb", function() Snacks.picker.lines() end,                 desc = "Buffer Lines" },
     -- Other
-    { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
-    { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
-    { "<leader>ft", function() Snacks.terminal.toggle() end, desc = "Toggle Terminal" },
-    { "<leader>wm", function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+    { "<leader>.",  function() Snacks.scratch() end,                      desc = "Toggle Scratch Buffer" },
+    { "<leader>S",  function() Snacks.scratch.select() end,               desc = "Select Scratch Buffer" },
+    { "<leader>ft", function() Snacks.terminal.toggle() end,              desc = "Toggle Terminal" },
+    { "<leader>wm", function() Snacks.zen.zoom() end,                     desc = "Toggle Zoom" },
   },
 }
