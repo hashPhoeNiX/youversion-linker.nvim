@@ -34,7 +34,7 @@ in
     EDITOR = "nvim";
     # NVIM_TEST_CONFIG = ./. + "/test-config/nvim";
   };
-
+  languages.javascript.enable = true;
   packages = with pkgs; [
     neovim
     tree

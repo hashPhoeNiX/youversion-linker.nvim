@@ -7,6 +7,10 @@
 >[!Bible] [John 1:1-5 JHN - AMP](https://www.bible.com/bible/1588/jhn.1.1-5)
 >In the beginning [before all time] was the Word (Christ), and the Word was with God, and the Word was God Himself. [Gen 1:1; Is 9:6] He was [continually existing] in the beginning [co-eternally] with God. All things were made and came into existence through Him; and without Him not even one thing was made that has come into being. In Him was life [and the power to bestow life], and the life was the Light of men. The Light shines on in the darkness, and the darkness did not understand it or overpower it or appropriate it or absorb it [and is unreceptive to it]. [Gen 1:3]
 
+>[!Bible] [John 5:1 JHN - AMP](https://www.bible.com/bible/1588/jhn.5.1)
+>Later on there was a Jewish feast (festival), and Jesus went up to Jerusalem.
+
+[^John1:1JHN-NKJV]
 Bible passage... [^Genesis1:1GEN-NKJV]
 
 [^Mark9:23MRK-NKJV]
@@ -24,7 +28,7 @@ This is an example of a footnote. [^Matthew6:33MAT-NKJV] another [^John1:1JHN-NK
 [^John5:4JHN-NKJV]
 [^Matthew6:33MAT-NKJV]
 [^John3:14JHN-NKJV]
-
+This is an example of a footnote. Referencing the book of [^Luke1:5LUK-AMP]
 - [ ] sample checkbox [^Joshua1:2JOS-NKJV]
 
 
@@ -77,4 +81,8 @@ If you are a thief, quit stealing. Instead, use your hands for good hard work, a
 [^John1:1JHN-NKJV]: [John1:1JHN-NKJV](https://www.bible.com/bible/114/jhn.1.1) In the beginning was the Word, and the Word was with God, and the Word was God.
 
 [^John3:1JHN-KJV]: [John3:1JHN-KJV](https://www.bible.com/bible/1/jhn.3.1) There was a man of the Pharisees, named Nicodemus, a ruler of the Jews
+
+[^Luke1:5LUK-AMP]: [Luke1:5LUK-AMP](https://www.bible.com/bible/1588/luk.1.5) In the days of Herod [the Great], king of Judea, there was a certain priest whose name was Zacharias, of the division of Abijah. His wife was a descendant of Aaron [the first high priest of Israel], and her name was Elizabeth.
+
+[^John1:1JHN-NKJV]: [John1:1JHN-NKJV](https://www.bible.com/bible/114/jhn.1.1) In the beginning was the Word, and the Word was with God, and the Word was God.
 
