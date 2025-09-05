@@ -53,7 +53,7 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
     if separator_exists(buf, separator) then
       separator = ""
     else
-      vim.api.nvim_buf_set_lines(buf, last_line_idx, last_line_idx, false, { separator })
+      vim.api.nvim_buf_set_lines(buf, last_line_idx, last_line_idx, false, { "", separator, "" })
       last_line_idx = last_line_idx + 1
     end
     item_text = vim.trim(item_text):gsub("%s", "")
