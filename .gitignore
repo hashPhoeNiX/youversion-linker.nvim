@@ -9,6 +9,8 @@ test_menu_popup.lua
 test.lua
 nui_test.lua
 test_insert_verse.lua
+dbt-project.md
+github-copilot
 
 # luarocks build files
 *.src.rock
