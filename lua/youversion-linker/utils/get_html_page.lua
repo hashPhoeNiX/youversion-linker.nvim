@@ -1,6 +1,4 @@
--- local pl = require("pl.pretty")
 local ok, http = pcall(require, "socket.http")
--- local cjson = require("cjson.safe")
 
 if not ok then
   vim.notify("Missing 'luasocket' dependency! Please check the documentation for instructions to install.",

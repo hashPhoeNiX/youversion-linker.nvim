@@ -1,4 +1,3 @@
-local rex = require("rex_pcre")
 local regex_utils = require("youversion-linker.utils.regex_utils")
 
 local M = {}

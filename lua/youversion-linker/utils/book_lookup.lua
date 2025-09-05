@@ -2,10 +2,29 @@ local ok, cjson = pcall(require, "cjson.safe")
 
 if not ok then
   vim.notify("Missing 'cjson' dependency! Please check documentation for steps to install.", vim.log.levels.ERROR)
-  return nil
+  return {}
 end
 
 local M = {}
+
+local function load_json_file(path, error_context)
+  local success, file = pcall(io.open, path, "r")
+  if not success or not file then
+    vim.notify(error_context .. " not found at: " .. path, vim.log.levels.WARN)
+    return {}
+  end
+
+  local content = file:read("*a")
+  file:close()
+
+  local decoded_success, data_or_err = pcall(cjson.decode, content)
+  if not decoded_success then
+    vim.notify("Failed to parse " .. error_context .. " JSON: " .. tostring(data_or_err), vim.log.levels.ERROR)
+    return {}
+  end
+
+  return data_or_err
+end
 
 M.load_book_abbreviations = function()
   local info = debug.getinfo(1, "S")
@@ -15,27 +34,10 @@ M.load_book_abbreviations = function()
   end
 
   local source = info.source:match("^@(.+)") or info.source:sub(2)
-  -- print(source)
   local dirname = vim.fn.fnamemodify(source, ":h")
-  -- print(dirname)
   local book_dir_path = vim.fn.resolve(dirname .. '/books/en.json')
 
-  local success, file = pcall(io.open, book_dir_path, "r")
-  if not success or not file then
-    vim.notify("Bible book abbreviations not found at: " .. book_dir_path, vim.log.levels.WARN)
-    return {}
-  end
-
-  local content = file:read("*a")
-  file:close()
-
-  local decoded_success, data = pcall(cjson.decode, content)
-  if not decoded_success then
-    vim.notify("Failed to parse Bible book abbreviations JSON", vim.log.levels.ERROR)
-    return {}
-  end
-
-  return data
+  return load_json_file(book_dir_path, "Bible book abbreviations")
 end
 
 M.load_bible_version_ids = function()
@@ -49,38 +51,8 @@ M.load_bible_version_ids = function()
   local dirname = vim.fn.fnamemodify(source, ":h")
   local version_dir_path = vim.fn.resolve(dirname .. '/books/versions.json')
 
-  local success, file = pcall(io.open, version_dir_path, "r")
-  if not success or not file then
-    vim.notify("Bible book abbreviations not found at: " .. version_dir_path, vim.log.levels.WARN)
-    return {}
-  end
-
-  local content = file:read("*a")
-  file:close()
-
-  local decoded_success, data = pcall(cjson.decode, content)
-  if not decoded_success then
-    vim.notify("Failed to parse Bible Version JSON", vim.log.levels.ERROR)
-    return {}
-  end
-
-  return data
+  return load_json_file(version_dir_path, "Bible version IDs")
 end
-
--- local sep = package.config:sub(1, 1)
--- local dirname = string.sub(debug.getinfo(1).source, 2, string.len('/youversion-linker.lua') * -1)
--- local book_dir_path = dirname .. 'books/en.json'
--- -- print("Book Path: " .. book_dir_path)
--- -- local native_path   = dirname .. sep .. 'native.lua
---
--- -- M.getBooksList = function()
--- local book_path = io.open(book_dir_path, "r")
--- local en_books = book_path:read("*a")
--- book_path:close()
--- local booksTable = cjson.decode(en_books)
--- vim.print(booksTable)
--- return booksTable
--- end
 
 local booksTable = M.load_book_abbreviations()
 local bibleVersions = M.load_bible_version_ids()
@@ -105,22 +77,13 @@ M.getBook = function(bookName)
   return nil, "Invalid book name: " .. tostring(bookName)
 end
 
--- local function get_id_by_abbreviation(data, lang_key, abbreviation)
---     local lang = data[lang_key]
---     if not lang or not lang.data then
---         return nil, "Language key not found"
---     end
---     for _, entry in ipairs(lang.data) do
---         if entry.abbreviation == abbreviation then
---             return entry.id
---         end
---     end
---     return nil, "Abbreviation not found"
--- end
-
 M.getVersionId = function(lang_key, version)
   lang_key = lang_key or 'eng'
   local lang = bibleVersions[lang_key]
+  if not lang or not lang.data then
+    vim.notify("Language key not found: " .. tostring(lang_key), vim.log.levels.WARN)
+    return nil, "Language key not found: " .. tostring(lang_key)
+  end
   for _, value in pairs(lang.data) do
     if value.abbreviation == version then
       return value.id
@@ -128,7 +91,6 @@ M.getVersionId = function(lang_key, version)
   end
 
   vim.notify("ID for bible version: " .. version .. " not found")
-
   return nil, "Abbreviation not found: " .. version
 end
 
