@@ -54,7 +54,7 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
       separator = ""
     else
       vim.api.nvim_buf_set_lines(buf, last_line_idx, last_line_idx, false, { "", separator, "" })
-      last_line_idx = last_line_idx + 1
+      last_line_idx = last_line_idx + 2 -- adjust last line index for the empty lines before and after the separator
     end
     item_text = vim.trim(item_text):gsub("%s", "")
     api.nvim_buf_set_lines(
