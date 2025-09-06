@@ -12,6 +12,10 @@ test_insert_verse.lua
 dbt-project.md
 github-copilot
 ignored-test.md
+just_test.md
+test-config/
+misc/
+
 # luarocks build files
 *.src.rock
 *.zip
