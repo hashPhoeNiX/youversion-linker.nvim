@@ -1,21 +1,44 @@
+---@class BiblePassage
+---@field text string
+---@field reference string
+---@field loaded boolean
+---@field error boolean|nil
+---@field winid any
+---@field bufnr any
+
+---@class MenuResult
+---@field trigger_text string
+---@field extracted_reference table|nil
+---@field displayBook string
+
 local M = {}
 
 local Menu = require("nui.menu")
 local Popup = require("nui.popup")
 local event = require("nui.utils.autocmd").event
-local config = require("youversion-linker.config")
-local parser = require("youversion-linker.parser")
-local menu_module = require("youversion-linker.menu")
-local replacer = require("youversion-linker.replacer")
-local cursor = require("youversion-linker.cursor")
-local autocmd = require("youversion-linker.autocmd")
-local core = require("youversion-linker.core")
+-- local config = require("youversion-linker.config")
+-- local parser = require("youversion-linker.parser")
+-- local menu_module = require("youversion-linker.menu")
+-- local replacer = require("youversion-linker.replacer")
+-- local cursor = require("youversion-linker.cursor")
+-- local autocmd = require("youversion-linker.autocmd")
+-- local core = require("youversion-linker.core")
 local api = vim.api
 
+---@alias nui_menu any
+---@alias nui_popup any
+
+---@type nui_menu|nil
 local current_menu = nil
+
+---@type nui_popup|nil
 local current_popup = nil
+
+---@type table<number, BiblePassage>
 local bible_passages_cache = {} -- Cache for pre-fetched passages
-local current_selected_id = 1   -- Track currently selected menu item ID
+
+---@type number
+local current_selected_id = 1 -- Track currently selected menu item ID
 
 local function close_current_menu()
   -- vim.notify("Cleaning up existing popups", vim.log.levels.DEBUG)
@@ -23,25 +46,30 @@ local function close_current_menu()
     current_menu:unmount()
     current_menu = nil
   end
+
   if current_popup then
     current_popup:unmount()
     current_popup = nil
   end
+
   bible_passages_cache = {} -- Clear cache when menu closes
   current_selected_id = 1   -- Reset selected ID
 end
 
+---Get config
+---@param user_config any
+---@return YouVersionLinkerConfig
 M.get_config = function(user_config)
-  local config_opts = config.get_config(user_config)
+  local config_opts = require("youversion-linker.config").get_config(user_config)
   return config_opts
 end
 
--- Asynchronous Bible passage fetcher
+---Asynchronous Bible passage fetcher
 local function fetch_bible_passage_async(result, item, item_id, callback)
   vim.schedule(function()
     local extracted_reference = result.extracted_reference
     if not extracted_reference then
-      extracted_reference = parser.extract_bible_reference(item.text)
+      extracted_reference = require("youversion-linker.parser").extract_bible_reference(item.text)
     end
 
     if extracted_reference and extracted_reference.book then
@@ -51,7 +79,7 @@ local function fetch_bible_passage_async(result, item, item_id, callback)
       local version = item.text:match("([^%s]+)$") -- Extract version (last word)
 
       local success, bible_text = pcall(function()
-        local core_result = core.main(bible_ref, version)
+        local core_result = require("youversion-linker.core").main(bible_ref, version)
         return core_result and core_result.verses or nil
       end)
 
@@ -85,7 +113,11 @@ local function fetch_bible_passage_async(result, item, item_id, callback)
   end)
 end
 
--- Initialize cache with loading placeholders and start async fetching
+---Initialize cache with loading placeholders and start async fetching
+---@alias nui_menu_menu_items any
+---@param result MenuResult
+---@param menu_items nui_menu_menu_items[] Bible Passage and the enabled Bible Versions
+---@param bible_passage_popup nui_popup
 local function initialize_bible_passages_async(result, menu_items, bible_passage_popup)
   -- Initialize cache with loading placeholders
   for i, item in ipairs(menu_items) do
@@ -140,7 +172,10 @@ local function initialize_bible_passages_async(result, menu_items, bible_passage
   end
 end
 
--- Updated function to use cached passages (handles loading states)
+---Updated function to use cached passages (handles loading states)
+---@param bible_passage_popup nui_popup
+---@param bible_passages table<number, BiblePassage>
+---@param item_id number
 M.update_bible_passage_popup = function(bible_passage_popup, bible_passages, item_id)
   if not bible_passage_popup or not bible_passage_popup.winid or not vim.api.nvim_win_is_valid(bible_passage_popup.winid) then
     return
@@ -169,8 +204,11 @@ M.update_bible_passage_popup = function(bible_passage_popup, bible_passages, ite
   vim.api.nvim_set_option_value('modifiable', false, { buf = bible_passage_popup.bufnr })
 end
 
+
+---comment
+---@param user_config YouVersionLinkerConfig|nil
 M.create_and_show_popup_menu = function(user_config)
-  local result = cursor.get_current_line(user_config)
+  local result = require("youversion-linker.cursor").get_current_line(user_config)
   if result then
     local trigger_text = result.trigger_text
     if not result.extracted_reference then
@@ -183,7 +221,15 @@ M.create_and_show_popup_menu = function(user_config)
     local menu_options = config_options.menu_options
     local popup_options = config_options.popup_options
 
-    local menu_items = menu_module.create_menu_items(result)
+    local keymaps = config_options.menu_keymaps or {
+      focus_next = { "j", "<Down>", "<Tab>" },
+      focus_prev = { "k", "<Up>", "<S-Tab>" },
+      close = { "<Esc>", "<C-c>" },
+      submit = { "<CR>", "<Space>" },
+      focus_menu = { "<S-Tab>" },
+    }
+
+    local menu_items = require("youversion-linker.menu").create_menu_items(result)
 
     if #menu_items == 0 then
       vim.notify("No enabled Bible versions found", vim.log.levels.WARN)
@@ -204,23 +250,25 @@ M.create_and_show_popup_menu = function(user_config)
       lines = items,
       max_width = math.max(50, #trigger_text + #displayBook + 20), -- bible passage + display book + version lengths
       keymap = {
-        focus_next = { "j", "<Down>", "<Tab>" },
-        focus_prev = { "k", "<Up>", "<S-Tab>" },
-        close = { "<Esc>", "<C-c>" },
-        submit = { "<CR>", "<Space>" },
+        focus_next = keymaps.focus_next,
+        focus_prev = keymaps.focus_prev,
+        close = keymaps.close,
+        submit = keymaps.submit,
       },
       on_close = function()
         vim.notify("Menu closed", vim.log.levels.INFO)
         current_menu = nil -- clear when menu is closed
         current_popup = nil
-
-        pcall(vim.keymap.del, { 'i', 'n' }, "<S-Tab>")
+        for _, key in ipairs(keymaps.focus_menu) do
+          pcall(vim.keymap.del, { "i", "n" }, key)
+        end
+        -- pcall(vim.keymap.del, { 'i', 'n' }, "<S-Tab>")
       end,
       on_submit = function(item)
         vim.notify("Selected: " .. item.text, vim.log.levels.INFO)
         local extracted_reference = result.extracted_reference
         if not extracted_reference then
-          extracted_reference = parser.extract_bible_reference(item.text)
+          extracted_reference = require("youversion-linker.parser").extract_bible_reference(item.text)
           if not extracted_reference then
             vim.notify("Could not parse Bible reference", vim.log.levels.ERROR)
             return
@@ -228,11 +276,15 @@ M.create_and_show_popup_menu = function(user_config)
         end
         local bible_ref = extracted_reference.book .. " " .. extracted_reference.chapter_verse_range
         local version = item.text:match("([^%s]+)$") -- Extract version (last word)
-        replacer.replace_line_with_bible_verse(result, bible_ref, item.text, version)
+        require("youversion-linker.replacer").replace_line_with_bible_verse(result, bible_ref, item.text, version)
         current_menu = nil                           -- clear reference after submission
         current_popup = nil
 
-        pcall(vim.keymap.del, { 'i', 'n' }, "<S-Tab>")
+        for _, key in ipairs(keymaps.focus_menu) do
+          pcall(vim.keymap.del, { "i", "n" }, key)
+        end
+
+        -- pcall(vim.keymap.del, { 'i', 'n' }, "<S-Tab>")
       end,
       on_change = function(item, node)
         -- Track the currently selected item ID
@@ -240,6 +292,22 @@ M.create_and_show_popup_menu = function(user_config)
         M.update_bible_passage_popup(bible_passage_popup, bible_passages_cache, item.id)
       end,
     })
+
+    -- Set up focus menu keymap
+    local function setup_focus_keymap()
+      for _, key in ipairs(keymaps.focus_menu) do
+        vim.keymap.set({ "i", "n" }, key, function()
+          if current_menu and current_menu.winid then
+            vim.schedule(function()
+              vim.cmd("stopinsert") -- Exit insert mode first
+              pcall(vim.api.nvim_set_current_win, current_menu.winid)
+            end)
+          else
+            vim.notify("Popup menu is not active", vim.log.levels.WARN)
+          end
+        end, { desc = "Focus Bible version menu", buffer = true })
+      end
+    end
 
     current_menu = menu
     current_popup = bible_passage_popup
@@ -252,23 +320,28 @@ M.create_and_show_popup_menu = function(user_config)
       M.update_bible_passage_popup(bible_passage_popup, bible_passages_cache, 1)
     end
 
-    vim.keymap.set({ "i", "n" }, "<S-Tab>", function()
-      if current_menu and current_menu.winid then
-        vim.schedule(function()
-          vim.cmd("stopinsert") -- force exit insert mode first
-          pcall(vim.api.nvim_set_current_win, current_menu.winid)
-        end)
-      else
-        vim.notify("Popup menu is not active", vim.log.levels.WARN)
-      end
-    end, { desc = "Focus Bible version menu", buffer = true })
+    setup_focus_keymap()
+
+    -- vim.keymap.set({ "i", "n" }, "<S-Tab>", function()
+    --   if current_menu and current_menu.winid then
+    --     vim.schedule(function()
+    --       vim.cmd("stopinsert") -- force exit insert mode first
+    --       pcall(vim.api.nvim_set_current_win, current_menu.winid)
+    --     end)
+    --   else
+    --     vim.notify("Popup menu is not active", vim.log.levels.WARN)
+    --   end
+    -- end, { desc = "Focus Bible version menu", buffer = true })
 
     menu:on(event.BufLeave, function()
+      for _, key in ipairs(keymaps.focus_menu) do
+        pcall(vim.keymap.del, { "i", "n" }, key)
+      end
       menu:unmount()
       bible_passage_popup:unmount()
       current_menu = nil
       current_popup = nil
-      pcall(vim.keymap.del, 'i', "<S-Tab>")
+      -- pcall(vim.keymap.del, 'i', "<S-Tab>")
     end)
   else
     vim.notify("No trigger with Bible verse text detected", vim.log.levels.INFO)
@@ -276,9 +349,11 @@ M.create_and_show_popup_menu = function(user_config)
 end
 
 M.setup_trigger = function(user_config)
-  autocmd.setup_trigger(user_config, M.create_and_show_popup_menu, close_current_menu)
+  require("youversion-linker.autocmd").setup_trigger(user_config, M.create_and_show_popup_menu, close_current_menu)
 end
 
+---comment
+---@param user_config YouVersionLinkerConfig
 M.trigger_manual = function(user_config)
   close_current_menu()
   M.create_and_show_popup_menu(user_config)

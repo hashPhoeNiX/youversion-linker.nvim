@@ -1,6 +1,13 @@
+---@class YouVersionLinkerAutocmd
 local M = {}
-local parser = require("youversion-linker.parser")
+
+
+-- local parser = require("youversion-linker.parser")
 local api = vim.api
+
+---@param user_config YouVersionLinkerConfig
+---@param create_and_show_popup_menu function
+---@param close_current_menu_fn function
 M.setup_trigger = function(user_config, create_and_show_popup_menu, close_current_menu_fn)
   local debounce_timer = nil
   -- if not user_config.filetypes then
@@ -20,11 +27,18 @@ M.setup_trigger = function(user_config, create_and_show_popup_menu, close_curren
         debounce_timer = nil
       end
 
-      local cursor_pos = api.nvim_win_get_cursor(0)
-      local line = api.nvim_get_current_line()
-      local row, col = cursor_pos[1], cursor_pos[2]
+      -- local cursor_pos = api.nvim_win_get_cursor(0)
+      -- local line = api.nvim_get_current_line()
+      -- local row, col = cursor_pos[1], cursor_pos[2]
 
-      local ok, trigger_info = pcall(parser.find_trigger_and_text, line, col)
+      local ok, trigger_info = pcall(
+        function()
+          local cursor_pos = api.nvim_win_get_cursor(0)
+          local line = api.nvim_get_current_line()
+          local row, col = cursor_pos[1], cursor_pos[2]
+          return require("youversion-linker.parser").find_trigger_and_text(line, col)
+        end
+      )
       if not ok then
         vim.notify("Parser error: " .. tostring(trigger_info), vim.log.levels.ERROR)
         -- return
@@ -44,7 +58,8 @@ M.setup_trigger = function(user_config, create_and_show_popup_menu, close_curren
           local current_line = api.nvim_get_current_line()
           local current_row, current_col = current_cursor_pos[1], current_cursor_pos[2]
 
-          local current_ok, current_trigger_info = pcall(parser.find_trigger_and_text, current_line, current_col)
+          local current_ok, current_trigger_info = pcall(require("youversion-linker.parser").find_trigger_and_text,
+            current_line, current_col)
           if not current_ok then
             vim.notify("Parser error on re-check: " .. tostring(current_trigger_info), vim.log.levels.ERROR)
             -- return
