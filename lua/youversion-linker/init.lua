@@ -4,7 +4,7 @@ M.core = require("youversion-linker.core")
 -- local plugin = require("lua.youversion-linker.main")
 
 M.setup = function(user_config)
-  local plugin = require("lua.youversion-linker.main")
+  local plugin = require("youversion-linker.main")
   user_config = user_config or {}
   M._config = plugin.get_config(user_config)
 
@@ -27,7 +27,7 @@ M.setup = function(user_config)
 end
 
 M.manual_trigger = function(user_config)
-  require("lua.youversion-linker.main").trigger_manual(user_config)
+  require("youversion-linker.main").trigger_manual(user_config)
 end
 
 return M
