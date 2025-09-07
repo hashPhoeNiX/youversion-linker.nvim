@@ -187,11 +187,24 @@ M.update_bible_passage_popup = function(bible_passage_popup, bible_passages, ite
     return
   end
 
-  local lines = { passage_data.reference, passage_data.text }
+  local lines = { passage_data.reference }
+
+  -- Split the passage texts by newlines and add each line individually
+  if passage_data.text then
+    local text_lines = vim.split(passage_data.text, '\n', { plain = true })
+    for _, line in ipairs(text_lines) do
+      table.insert(lines, line)
+    end
+  end
 
   -- Add loading indicator if still loading
   if not passage_data.loaded then
-    lines[2] = passage_data.text .. " ⏳"
+    if #lines > 1 then
+      lines[#lines] = lines[#lines] .. " ⏳"
+    else
+      table.insert(lines, "Loading... ⏳")
+      -- lines[2] = passage_data.text .. " ⏳"
+    end
   end
 
   -- Set the 'modifiable' option to true

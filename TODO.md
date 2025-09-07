@@ -53,4 +53,9 @@
 - [ ] **Add support for custom popup appearance.**
 - [ ] **Add support for internationalization/localization (optional).**
 
+[2025-09-07 22:42]
+
+- [-] Add Bible book completion
+- [-] Order the bible version menu items or allow users to determine the order of display
+
 

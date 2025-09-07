@@ -34,11 +34,19 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
   local new_lines
   local new_line_number
   if trigger_char == ">" then
+    -- Split verses by newlines and format each line as a block quote
+    local verse_lines = vim.split(result.verses, "\n", { plain = true })
+
     new_lines = {
       ">" .. "[!Bible] [" .. vim.trim(item_text) .. "]" .. "(" .. result.url .. ")",
-      ">" .. result.verses,
-      "",
     }
+
+    -- Add each verse line as a block quote
+    for _, verse_line in ipairs(verse_lines) do
+      table.insert(new_lines, ">" .. verse_line)
+    end
+
+    table.insert(new_lines, "")
     new_line_number = line_number
   elseif trigger_char == '@' then
     new_lines = {
@@ -67,10 +75,13 @@ M.replace_line_with_bible_verse = function(current_line_result, bible_ref, item_
       }
     )
 
+    -- Replace new lines with space
+    local verses = result.verses:gsub("\n", " ")
+
     new_lines = {
       "[" ..
       trigger_char ..
-      item_text .. "]" .. ": " .. "[" .. item_text .. "]" .. "(" .. result.url .. ")" .. " " .. result.verses,
+      item_text .. "]" .. ": " .. "[" .. item_text .. "]" .. "(" .. result.url .. ")" .. " " .. verses,
       ""
     }
 

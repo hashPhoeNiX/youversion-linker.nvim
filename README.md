@@ -1,3 +1,7 @@
+>[!Bible] [Proverbs 19:21 PRO - NIV](https://www.bible.com/bible/111/pro.19.21)
+>Many are the plans in a person’s heart,
+>but it is the LORD’s purpose that prevails.
+
 # YouVersion Linker.nvim
 
 A modern Neovim plugin for seamlessly inserting Bible passages and links from [YouVersion](https://www.bible.com) into your notes. Built with Neovim best practices and Lua excellence.
